@@ -139,7 +139,8 @@ table.insert(sorted, checkin)
 end
 table.sort(sorted, SortBeers)
 
-
+if strutil.strlen(venue.name) > 0
+then
 Out:puts("~e~b"..venue.name..":~0 ")
 for str,checkin in pairs(sorted)
 do
@@ -147,6 +148,8 @@ str=TimeColor(now, checkin)
 if str ~= nil then Out:puts(TimeColor(now, checkin) .. checkin.key.."~0, ") end
 end
 Out:puts("\n")
+end
+
 end
 
 
