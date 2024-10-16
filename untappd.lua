@@ -65,6 +65,8 @@ S=stream.STREAM(url)
 doc=S:readdoc()
 S:close()
 
+io.stderr:write(doc.."\n")
+
 Xml=xml.XML(doc)
 item=Xml:next()
 while item ~= nil
@@ -72,7 +74,11 @@ do
 
 if item.type ~= nil 
 then
-	if item.type=="div" and item.data=='class="venue-name"' then venue.name=XMLGetText(Xml) end
+	if item.type=="div" and item.data=='class="venue-name"' 
+	then 
+	while item.type ~= "h1" do item=Xml:next() end
+	venue.name=XMLGetText(Xml) 
+	end
 	if item.type=="div" and item.data=='class="checkin"' then ParseCheckin(venue, Xml) end
 	if item.type=="p" and item.data=='class="address"' 
 	then 
@@ -316,7 +322,7 @@ end
 
 
 function PrintHelp()
-print("untappd.lua  version 1.0")
+print("untappd.lua  version 1.1")
 print("usage:")
 print("   untappd.lua add <url>     - add untappd page to monitored pages/venues")
 print("   untappd.lua del <url>     - delete untappd page from monitored pages/venues by it's untapped page url")
