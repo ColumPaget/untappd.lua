@@ -53,6 +53,32 @@ end
 
 end
 
+function ParseBeerDetails(venue, Xml)
+checkin={}
+
+item=Xml:next()
+while item ~= nil and item.type ~= "a" do item=Xml:next() end
+
+checkin.brewer=""
+checkin.user="venue menu"
+checkin.beer=string.gsub(XMLGetText(Xml), "\n", " ")
+checkin.beer=strutil.trim(checkin.beer)
+checkin.secs=time.secs()
+
+item=Xml:next()
+while item ~= nil 
+do 
+if item.type == "a" and string.find(item.data , 'href=":brewery"') ~= nil then checkin.brewer=strutil.trim(XMLGetText(Xml)) end
+
+--technically this is the start of the next beer, but we use it here to catch the end of the one we are parsing
+if item.type == "div" and item.data == 'class="beer-details"' then break end
+
+item=Xml:next() 
+end
+
+table.insert(venue.checkins, checkin)
+end
+
 
 function GetVenueDetails(url)
 local venue={}
@@ -65,8 +91,6 @@ S=stream.STREAM(url)
 doc=S:readdoc()
 S:close()
 
-io.stderr:write(doc.."\n")
-
 Xml=xml.XML(doc)
 item=Xml:next()
 while item ~= nil
@@ -78,9 +102,9 @@ then
 	then 
 	while item.type ~= "h1" do item=Xml:next() end
 	venue.name=XMLGetText(Xml) 
-	end
-	if item.type=="div" and item.data=='class="checkin"' then ParseCheckin(venue, Xml) end
-	if item.type=="p" and item.data=='class="address"' 
+	elseif item.type=="div" and item.data=='class="checkin"' then ParseCheckin(venue, Xml)
+	elseif item.type=="div" and item.data=='class="beer-details"' then ParseBeerDetails(venue, Xml)
+	elseif item.type=="p" and item.data=='class="address"' 
 	then 
 	str=XMLGetText(Xml)
 	pos=string.find(str, "%(")
@@ -134,7 +158,6 @@ do
 	checkin.key=checkin.beer.." ("..checkin.brewer..")"
 	checkin.age=(now - checkin.secs) / 3600
 	if beers[checkin.key] == nil then beers[checkin.key]=checkin end
-	
 end
 
 
@@ -322,7 +345,7 @@ end
 
 
 function PrintHelp()
-print("untappd.lua  version 1.1")
+print("untappd.lua  version 1.2")
 print("usage:")
 print("   untappd.lua add <url>     - add untappd page to monitored pages/venues")
 print("   untappd.lua del <url>     - delete untappd page from monitored pages/venues by it's untapped page url")
