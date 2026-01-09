@@ -1,0 +1,5 @@
+v2.0 (2026-01-08)
+* fix to work with latest version of untappd website
+* added -f to specify path to alternate list of venue files
+* added display of opening time for venues that have that
+* if a venue's default page presents a menu instead of checkins, then load checkins from it's activity page

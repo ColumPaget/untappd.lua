@@ -7,6 +7,20 @@ Venues are added using the 'add' command and passing the url of the venue's page
 
 untappd.lua requires libUseful (https://github.com/ColumPaget/libUseful) and libUseful-lua (https://github.com/ColumPaget/libUseful-lua) to be installed.
 
+
+
+VENUE FILES
+===========
+
+untappd.lua uses 'venue files' which are files containing lists of venues in the format:
+
+```
+<url> name=<name> address=<address>
+```
+
+the 'name' field is the display name output when used with 'show'. The address isn't currently used. When usinig untappd.lua's "add" command venues are added to the current venue file. The "-f" option allows specifying an alternate venue file, the default one is "~/.config/untapped.venues" (yes, untapped spelt with an 'e').
+
+
 USAGE
 =====
 
@@ -17,4 +31,11 @@ USAGE
    untappd.lua show <url>    - display recent beer reports for a venue specified by untappd page url
    untappd.lua show          - display recent beer reports for all venues in the monitor list
    untappd.lua list          - list all venues in the monitor list
+   untappd.lua help          - show this help
+   untappd.lua -help         - show this help
+   untappd.lua -help         - show this help
+   untappd.lua --help        - show this help
+   untappd.lua -?            - show this help
+options:
+   -f <path>       Path to alternative venue file
 ```
