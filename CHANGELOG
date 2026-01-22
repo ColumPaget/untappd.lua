@@ -1,3 +1,6 @@
+v2.1 (2026-01-22)
+* minor change to run under lua-5.5.0
+
 v2.0 (2026-01-08)
 * fix to work with latest version of untappd website
 * added -f to specify path to alternate list of venue files

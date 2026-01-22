@@ -6,7 +6,7 @@ require("terminal")
 require("process")
 require("dataparser")
 
-VERSION="2.0"
+VERSION="2.1"
 config_path=process.homeDir().."/.config/untappd.lua/default.venues" .. ":" .. process.homeDir().."/.config/untapped.venues"
 
 today_name=time.format("%A")
@@ -313,7 +313,7 @@ end
 
 
 function VenueOutputInfo(venue, now, checkins)
-local str, checkin
+local str, id, checkin
 
 if strutil.strlen(venue.name) > 0
 then
@@ -326,7 +326,7 @@ then
     end
   end
   
-  for str,checkin in pairs(checkins)
+  for id,checkin in pairs(checkins)
   do
     str=TimeColor(now, checkin)
     if str ~= nil then Out:puts(TimeColor(now, checkin) .. checkin.key.."~0, ") end
